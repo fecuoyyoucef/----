@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الأوتار الرباعية - النسخة الكاملة</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        header h1 { margin: 0; font-size: 2rem; }
+        header p { font-size: 0.9rem; }
+        main {
+            flex-grow: 1;
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        section { padding: 20px; margin-bottom: 20px; border-radius: 5px; }
+        #intro-section h2, #test-section h2, #results-section h2 { color: #333; margin-top: 0; }
+        
+        #results-section h3 { color: #007bff; }
+        #results-section h4 { color: #17a2b8; margin-top: 25px; border-bottom: 1px solid #eee; padding-bottom: 5px;}
+
+        ul { list-style-type: disc; padding-right: 20px; margin-right: 0;}
+        li { margin-bottom: 5px; }
+
+        button {
+            display: inline-block;
+            background: #5cb85c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover { background: #4cae4c; }
+        .hidden { display: none; }
+        #options-container {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+            text-align: right;
+            padding: 12px 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .option-btn.selected {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .option-btn:hover:not(.selected):not(:disabled) { background-color: #e9e9e9; }
+        .option-btn:disabled:not(.selected) { opacity: 0.7; cursor: not-allowed; }
+        #next-question-btn { background-color: #007bff; }
+        #next-question-btn:hover { background-color: #0056b3; }
+        #next-question-btn:disabled { background-color: #cccccc; cursor: not-allowed; }
+        #retake-test-btn { background-color: #f0ad4e; margin-top: 20px;}
+        #retake-test-btn:hover { background-color: #ec971f; }
+        #result-display {
+            background-color: #fff; /* Changed from #e9ecef for a cleaner look */
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd; /* Lighter border */
+        }
+        .result-section-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+        }
+        .result-section-box h5 {
+            margin-top: 0;
+            color: #343a40;
+            font-size: 1.1em;
+        }
+        #diagnostic-info {
+            font-size: 0.85em;
+            color: #6c757d;
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+        #diagnostic-info p { margin: 3px 0; }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background: #333;
+            color: #fff;
+            font-size: 0.8rem;
+        }
+        @media (max-width: 600px) {
+            main { margin: 10px; padding: 15px; }
+            header h1 { font-size: 1.5rem; }
+            button { font-size: 0.9rem; padding: 8px 15px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>اختبار الأوتار الرباعية</h1>
+        <p>اختبار شخصية هرمي دقيق مع أنماط واضحة وأسماء سهلة</p>
+    </header>
+
+    <main id="main-content">
+        <section id="intro-section">
+            <h2>مقدمة عن اختبار الأوتار الرباعية</h2>
+            <p>اختبار مبني على 4 أنماط أساسية، كل نمط ينقسم لـ 3 مستويات و 4 سمات فرعية، ليُعطيك 48 نتيجة فريدة سهلة الفهم.</p>
+            <h3>مميزات الاختبار:</h3>
+            <ul>
+                <li>أسماء أنماط واضحة (ليست رموزًا مثل INFJ).</li>
+                <li>شرح عميق دون تعقيد.</li>
+                <li>نتائج دقيقة مع خطة تطوير شخصي.</li>
+            </ul>
+            <button id="start-test-btn">ابدأ الاختبار</button>
+        </section>
+
+        <section id="test-section" class="hidden">
+            <h2 id="question-title">السؤال 1 من 20</h2>
+            <p id="question-text">نص السؤال هنا...</p>
+            <div id="options-container"></div>
+            <button id="next-question-btn" class="hidden" disabled>السؤال التالي</button>
+        </section>
+
+        <section id="results-section" class="hidden">
+            <h2>نتيجتك في اختبار الأوتار الرباعية</h2>
+            <div id="result-display">
+                <h3 id="result-main-title"></h3> {/* لعرض الاسم الكامل للنمط */}
+                <p><strong>الاسم الرمزي:</strong> <span id="result-pattern-name"></span></p>
+                
+                <div class="result-section-box">
+                    <h5>الجوهر</h5>
+                    <p id="result-essence"></p>
+                </div>
+
+                <div class="result-section-box">
+                    <h5>آلية العمل</h5>
+                    <ul id="result-mechanism"></ul>
+                </div>
+
+                <div class="result-section-box">
+                    <h5>النظير التقليدي</h5>
+                    <p id="result-traditional-equivalent"></p>
+                </div>
+
+                <hr>
+                <h4>معلومات إضافية عن مكونات نمطك:</h4>
+
+                <div id="general-base-info-box" class="result-section-box hidden">
+                    <h5>عن نمطك الأساسي: <span id="base-pattern-title"></span></h5>
+                    <p><strong>الصفة:</strong> <span id="base-pattern-attribute"></span></p>
+                    <p><strong>التركيز:</strong> <span id="base-pattern-focus"></span></p>
+                    <p><strong>مثال مشهور:</strong> <span id="base-pattern-example"></span></p>
+                    <div id="base-pattern-notes">
+                        <h6>ملاحظات جوهرية:</h6>
+                        {/* سيتم ملء الملاحظات هنا */}
+                    </div>
+                </div>
+                
+                <div id="general-level-info-box" class="result-section-box hidden">
+                    <h5>عن مستواك الإدراكي: <span id="cognitive-level-title"></span></h5>
+                    <p><strong>الصفة:</strong> <span id="cognitive-level-attribute"></span></p>
+                    <p><strong>الميزة:</strong> <span id="cognitive-level-feature"></span></p>
+                </div>
+
+                <div id="general-trait-info-box" class="result-section-box hidden">
+                    <h5>عن سمتك الفرعية: <span id="sub-trait-title"></span></h5>
+                    <p><strong>التركيز:</strong> <span id="sub-trait-focus"></span></p>
+                </div>
+                
+                <div id="diagnostic-info">
+                    <p><strong>تفاصيل تحديد النمط (للتوضيح):</strong></p>
+                    <p>النمط الأساسي المهيمن: <span id="dominant-base-pattern-diag"></span></p>
+                    <p>المستوى الإدراكي المهيمن: <span id="dominant-cognitive-level-diag"></span></p>
+                    <p>السمة الفرعية المهيمنة: <span id="dominant-sub-trait-diag"></span></p>
+                </div>
+            </div>
+            <button id="retake-test-btn">إعادة الاختبار</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 اختبار الأوتار الرباعية. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script>
+        // --- 1. بيانات الأسئلة (نظيفة بدون معلومات تسجيل مباشرة) ---
+        const questions = [
+            // ... (نفس مصفوفة الأسئلة من الإجابة السابقة - 20 سؤال)
+            {
+                id: 1,
+                text: "عندما تواجه مشكلة معقدة غير مألوفة، نهجك الأساسي هو:",
+                options: [
+                    { value: "أ", text: "تفكيكها إلى خطوات منهجية." }, // وتد
+                    { value: "ب", text: "تجربة حلول جريئة حتى لو كانت مجازفة." }, // قوس
+                    { value: "ج", text: "استشارة خبرات متنوعة لرؤية شاملة." }, // دائرة
+                    { value: "د", text: "تحليل جذورها النظرية قبل الفعل." } // شبكة
+                ]
+            },
+            {
+                id: 2,
+                text: "دورك الطبيعي في الفريق يُشبه:",
+                options: [
+                    { value: "أ", text: "مهندس النظام (ضبط الهيكل)." }, // وتد
+                    { value: "ب", text: "المستكشف (كسر الروتين)." }, // قوس
+                    { value: "ج", text: "اللاصق (توحيد الجهود)." }, // دائرة
+                    { value: "د", text: "المُنظّر (تفسير الأنماط الخفية)." } // شبكة
+                ]
+            },
+            {
+                id: 3,
+                text: "أكثر ما يستهلك طاقتك النفسية:",
+                options: [
+                    { value: "أ", text: "الفوضى غير المُتحكّم بها." }, // وتد
+                    { value: "ب", text: "الروتين المتكرر." }, // قوس
+                    { value: "ج", text: "الصراعات الشخصية." }, // دائرة
+                    { value: "د", text: "الأفكار غير المجابة." } // شبكة
+                ]
+            },
+            {
+                id: 4,
+                text: "عند اتخاذ قرار مصيري، تعتمد أكثر على:",
+                options: [
+                    { value: "أ", text: "البيانات السابقة والتجارب الموثقة." }, // وتد
+                    { value: "ب", text: "حدسك وشغفك الداخلي." }, // قوس
+                    { value: "ج", text: "تأثير ذلك على مَن حولك." }, // دائرة
+                    { value: "د", text: "سيناريوهات مستقبلية محتملة." } // شبكة
+                ]
+            },
+            {
+                id: 5,
+                text: "طريقة تعاملك مع المهام الجديدة:",
+                options: [
+                    { value: "أ", text: "أدرسها بعمق لأشهر قبل البدء." }, // متأمل
+                    { value: "ب", text: "أبدأ فورًا وأتعلم أثناء العمل." }, // متفاعل
+                    { value: "ج", text: "أخلط بين التخطيط والعفوية حسب الموقف." } // متوازن
+                ]
+            },
+            {
+                id: 6,
+                text: "لو مُنعتُ من استخدام خطة بديلة جاهزة:",
+                options: [
+                    { value: "أ", text: "أصنع خطة جديدة بدقة عالية (حتى لو تأخرت)." }, // متأمل
+                    { value: "ب", text: "أبتكر حلًّا مرنًا أثناء التنفيذ." }, // متفاعل
+                    { value: "ج", text: "أستعين بآراء الآخرين لاختصار الطريق." } // متوازن
+                ]
+            },
+            {
+                id: 7,
+                text: "عبارة تعبّر عن علاقتك بالوقت:",
+                options: [
+                    { value: "أ", text: "\"الوقت كالسيف إن لم تقطعه قطعك\" (التخطيط المسبق)." }, // متأمل
+                    { value: "ب", text: "\"اللحظة المناسبة هي الآن\" (الاستجابة التلقائية)." }, // متفاعل
+                    { value: "ج", text: "\"الوقت نسبي\" (التكيف مع الظروف)." } // متوازن
+                ]
+            },
+            {
+                id: 8,
+                text: "لو أخبرك أحدهم: \"هذا مستحيل\"، ردّك الغريزي:",
+                options: [
+                    { value: "أ", text: "\"أثبت خطأك بالحقائق\"." }, // متأمل
+                    { value: "ب", text: "\"سأحاول لأرى بنفسي\"." }, // متفاعل
+                    { value: "ج", text: "\"لنتعاون لإيجاد طريقة\"." } // متوازن
+                ]
+            },
+            {
+                id: 9,
+                text: "أكبر مخاوفك الوجودية:",
+                options: [
+                    { value: "أ", text: "أن أكون غير كفء." }, // مثالي
+                    { value: "ب", text: "أن أفقد حريتي." }, // حالم
+                    { value: "ج", text: "أن أخذل مَن يعتمد عليّ." }, // راعي
+                    { value: "د", text: "أن أضيع في العادية." } // حالم
+                ]
+            },
+            {
+                id: 10,
+                text: "لو قدّرت شخصيتك في جملة واحدة، ستكون:",
+                options: [
+                    { value: "أ", text: "\"الإتقان هو لغتي\"." }, // مثالي
+                    { value: "ب", text: "\"الحدود لا وجود لها\"." }, // حالم
+                    { value: "ج", text: "\"النتائج تُحدث الفرق\"." }, // عملي
+                    { value: "د", text: "\"الروابط تُعطي معنى\"." } // راعي
+                ]
+            },
+            {
+                id: 11,
+                text: "عند اختيار مشروع لحياتك، المعيار الحاسم:",
+                options: [
+                    { value: "أ", text: "تحقيقه للمعايير المثالية." }, // مثالي
+                    { value: "ب", text: "إطلاقه لإبداعك الفريد." }, // حالم
+                    { value: "ج", text: "نتائجه الملموسة الفورية." }, // عملي
+                    { value: "د", text: "تأثيره الإيجابي على المجتمع." } // راعي
+                ]
+            },
+            {
+                id: 12,
+                text: "في نزاع عائلي حاد، دورك الطبيعي:",
+                options: [ 
+                    { value: "أ", text: "وضع قواعد للحوار." }, 
+                    { value: "ب", text: "كسر التوتر بفكاهة غير متوقعة." }, 
+                    { value: "ج", text: "منح الجميع مساحة للتعبير." }, 
+                    { value: "د", text: "تحليل الأسباب الخفية للنزاع." } 
+                ]
+            },
+            {
+                id: 13,
+                text: "تتعلم لغة جديدة عبر:",
+                options: [
+                    { value: "أ", text: "منهج مُرتّب + جدول زمني." }, 
+                    { value: "ب", text: "الغوص في بيئة ناطقة بها." }, 
+                    { value: "ج", text: "محادثات مع أصدقاء." }, 
+                    { value: "د", text: "تحليل هيكل اللغة أولًا." } 
+                ]
+            },
+            {
+                id: 14,
+                text: "ردّك على فشل مشروع كنت واثقًا منه:",
+                options: [
+                    { value: "أ", text: "مراجعة دقيقة لكل خطأ." }, 
+                    { value: "ب", text: "التحول لمشروع أكثر إثارة." }, 
+                    { value: "ج", text: "طلب الدعم العاطفي." }, 
+                    { value: "د", text: "استخلاص نظريات جديدة من الفشل." } 
+                ]
+            },
+            {
+                id: 15,
+                text: "أول ما يلفت انتباهك في شخصٍ جديد:",
+                options: [
+                    { value: "أ", text: "دقّته وتنظيمه." }, // وتد
+                    { value: "ب", text: "شغفه وطرافته." }, // قوس
+                    { value: "ج", text: "تعاطفه وتواضعه." }, // دائرة
+                    { value: "د", text: "عمق أفكاره." } // شبكة
+                ]
+            },
+            {
+                id: 16,
+                text: "الاختراع الذي يعجبك أكثر:",
+                options: [
+                    { value: "أ", text: "ساعة دقيقة." }, // وتد
+                    { value: "ب", text: "طائرة." }, // قوس
+                    { value: "ج", text: "الهاتف." }, // دائرة
+                    { value: "د", text: "الذكاء الاصطناعي." } // شبكة
+                ]
+            },
+            {
+                id: 17,
+                text: "كلمة ترفض أن تُوصف بها:",
+                options: [
+                    { value: "أ", text: "\"عشوائي\"." }, // وتد
+                    { value: "ب", text: "\"مقيّد\"." }, // قوس
+                    { value: "ج", text: "\"منعزل\"." }, // دائرة
+                    { value: "د", text: "\"سطحي\"." } // شبكة
+                ]
+            },
+            {
+                id: 18,
+                text: "السيناريو الأصعب عليك نفسيًا:",
+                options: [
+                    { value: "أ", text: "العمل في فوضى لا تُحل." }, // وتد
+                    { value: "ب", text: "العيش دون مفاجآت." }, // قوس
+                    { value: "ج", text: "النجاح دون شركاء." }, // دائرة
+                    { value: "د", text: "التقيّد بحلول جاهزة." } // قوس/شبكة
+                ]
+            },
+            {
+                id: 19,
+                text: "في لحظة فراغ غير متوقعة، تفعل:",
+                options: [
+                    { value: "أ", text: "ترتب شيئًا مهملًا." }, // وتد
+                    { value: "ب", text: "تجربة نشاط طارئ." }, // قوس + متفاعل
+                    { value: "ج", text: "تتصل بصديق." }, // دائرة
+                    { value: "د", text: "تغوص في فكرة فلسفية." } // شبكة + متأمل
+                ]
+            },
+            {
+                id: 20,
+                text: "لو استعنت بحيوان لتمثيلك، سيكون:",
+                options: [
+                    { value: "أ", text: "نسر." }, // وتد
+                    { value: "ب", text: "دولفين." }, // قوس
+                    { value: "ج", text: "ذئب." }, // دائرة
+                    { value: "د", text: "بومة." } // شبكة
+                ]
+            }
+        ];
+
+
+        // --- 2. خريطة تسجيل النقاط (مستنبطة من ملف الوورد) ---
+        const scoringMap = {
+            1:  { 'أ': { base: "الوتد" }, 'ب': { base: "القوس" }, 'ج': { base: "الدائرة" }, 'د': { base: "الشبكة" } },
+            2:  { 'أ': { base: "الوتد" }, 'ب': { base: "القوس" }, 'ج': { base: "الدائرة" }, 'د': { base: "الشبكة" } },
+            3:  { 'أ': { base: "الوتد" }, 'ب': { base: "القوس" }, 'ج': { base: "الدائرة" }, 'د': { base: "الشبكة" } },
+            4:  { 'أ': { base: "الوتد" }, 'ب': { base: "القوس" }, 'ج': { base: "الدائرة" }, 'د': { base: "الشبكة" } },
+            5:  { 'أ': { level: "المتأمِّل" }, 'ب': { level: "المتفاعل" }, 'ج': { level: "المتوازن" } },
+            6:  { 'أ': { level: "المتأمِّل" }, 'ب': { level: "المتفاعل" }, 'ج': { level: "المتوازن" } },
+            7:  { 'أ': { level: "المتأمِّل" }, 'ب': { level: "المتفاعل" }, 'ج': { level: "المتوازن" } },
+            8:  { 'أ': { level: "المتأمِّل" }, 'ب': { level: "المتفاعل" }, 'ج': { level: "المتوازن" } },
+            9:  { 'أ': { trait: "المثالي" }, 'ب': { trait: "الحالم" }, 'ج': { trait: "الراعي" }, 'د': { trait: "الحالم" } },
+            10: { 'أ': { trait: "المثالي" }, 'ب': { trait: "الحالم" }, 'ج': { trait: "العملي" }, 'د': { trait: "الراعي" } },
+            11: { 'أ': { trait: "المثالي" }, 'ب': { trait: "الحالم" }, 'ج': { trait: "العملي" }, 'د': { trait: "الراعي" } },
+            12: { 
+                'أ': { base: "الوتد", trait: "المثالي" }, 'ب': { base: "القوس", level: "المتفاعل" },
+                'ج': { base: "الدائرة", trait: "الراعي" }, 'د': { base: "الشبكة", level: "المتأمِّل" }
+            },
+            13: { 
+                'أ': { base: "الوتد", trait: "العملي" }, 'ب': { base: "القوس", trait: "الحالم" },
+                'ج': { base: "الدائرة", level: "المتوازن" }, 'د': { base: "الشبكة", level: "المتأمِّل" }
+            },
+            14: { 
+                'أ': { base: "الوتد", trait: "المثالي" }, 'ب': { base: "القوس", level: "المتفاعل" },
+                'ج': { base: "الدائرة", trait: "الراعي" }, 'د': { base: "الشبكة", trait: "العملي" }
+            },
+            15: { 'أ': { base: "الوتد" }, 'ب': { base: "القوس" }, 'ج': { base: "الدائرة" }, 'د': { base: "الشبكة" } },
+            16: { 'أ': { base: "الوتد" }, 'ب': { base: "القوس" }, 'ج': { base: "الدائرة" }, 'د': { base: "الشبكة" } },
+            17: { 'أ': { base: "الوتد" }, 'ب': { base: "القوس" }, 'ج': { base: "الدائرة" }, 'د': { base: "الشبكة" } },
+            18: { 
+                'أ': { base: "الوتد" }, 'ب': { base: "القوس" },
+                'ج': { base: "الدائرة" }, 'د': { base: "القوس" } // أو الشبكة، القوس أكثر وضوحًا لمعارضة التقييد
+            },
+            19: { 
+                'أ': { base: "الوتد" }, 'ب': { base: "القوس", level: "المتفاعل" },
+                'ج': { base: "الدائرة" }, 'د': { base: "الشبكة", level: "المتأمِّل" }
+            },
+            20: { 'أ': { base: "الوتد" }, 'ب': { base: "القوس" }, 'ج': { base: "الدائرة" }, 'د': { base: "الشبكة" } }
+        };
+        
+        // --- 3. بيانات الأنماط الـ 48 (تبقى كما هي من الإجابة السابقة) ---
+        const patternsData = {
+            "الوتد": {
+                "المتأمِّل": { 
+                    "المثالي": { name: "وتد متأمِّل (مثالي)", fullName: "المنظّم الباحث عن الكمال", essence: "المهندس المعماري للمثالية", mechanism: ["يبني أنظمة متكاملة بلا ثغرات", "يركز على الإتقان قبل التنفيذ"], traditional: "ISTJ/1w9" },
+                    "الحالم": { name: "وتد متأمِّل (حالم)", fullName: "المخطّط المبدع", essence: "صانع العوالم المنظمة", mechanism: ["يصمم هياكل إبداعية (مثل: ألعاب استراتيجية)", "يجمع بين الخيال والدقة"], traditional: "INTJ/5w4" },
+                    "العملي": { name: "وتد متأمِّل (عملي)", fullName: "المهندس المنفّذ", essence: "مهندس الواقع", mechanism: ["يحول النظريات إلى آلات عملية", "يرفض الأفكار غير القابلة للتطبيق"], traditional: "ESTJ/8w9" },
+                    "الراعي": { name: "وتد متأمِّل (راعي)", fullName: "الحَكَم العادل", essence: "حارس التقاليد", mechanism: ["يحفظ الأنظمة لخدمة المجتمع", "يطبّق القواعد لضمان العدالة"], traditional: "ISFJ/6w5" }
+                },
+                "المتوازن": { 
+                    "المثالي": { name: "وتد متوازن (مثالي)", fullName: "المُعدّل للأنظمة بمعايير عالية", essence: "ديبلوماسي المعايير", mechanism: ["يعدّل الأنظمة لتحقيق الانسجام", "يتجنب التطرف في التطبيق"], traditional: "ENFJ/1w2" },
+                    "الحالم": { name: "وتد متوازن (حالم)", fullName: "منسّق المشاريع الإبداعية", essence: "منسّق الرؤى الإبداعية", mechanism: ["يصمم عمليات مرنة للإبداع", "يربط بين الفن والتنظيم"], traditional: "ENFP/3w4" },
+                    "العملي": { name: "وتد متوازن (عملي)", fullName: "مدير العمليات الكفؤ", essence: "مدير الأزمات", mechanism: ["يحل المشكلات بالتوازن بين السرعة والدقة", "يركز على \"إصلاح ما تم كسره\""], traditional: "ESTP/8w7" },
+                    "الراعي": { name: "وتد متوازن (راعي)", fullName: "قائد الفريق الداعم", essence: "عمود المجتمع", mechanism: ["يبني شبكات دعم مؤسسية", "يجمع بين القواعد والرحمة"], traditional: "ESFJ/2w1" }
+                },
+                "المتفاعل": { 
+                    "المثالي": { name: "وتد متفاعل (مثالي)", fullName: "منفّذ سريع بمعايير دقيقة", essence: "المفتش السريع", mechanism: ["يكتشف الأخطاء فورًا ويصلحها", "معايير عالية في التنفيذ العاجل"], traditional: "ISTP/1w2" },
+                    "الحالم": { name: "وتد متفاعل (حالم)", fullName: "محوّل الأفكار الإبداعية لواقع ملموس", essence: "المخترع المنفّذ", mechanism: ["يحول الأفكار المجنونة لمنتجات عملية", "يجمع بين العفوية والتصميم"], traditional: "ENTP/7w6" },
+                    "العملي": { name: "وتد متفاعل (عملي)", fullName: "حلّال المشكلات العاجلة", essence: "فني الطوارئ", mechanism: ["يحل الأعطال بأدوات محدودة", "شعاره \"النتيجة الآن\""], traditional: "ESTJ/8w9" },
+                    "الراعي": { name: "وتد متفاعل (راعي)", fullName: "المنظّم المجتمعي السريع", essence: "المسعف التنظيمي", mechanism: ["ينقذ المشاريع المتعثرة بسرعة", "يركز على إنقاذ الفريق أولًا"], traditional: "ESFJ/6w7" }
+                }
+            },
+            "القوس": {
+                "المتأمِّل": { 
+                    "المثالي": { name: "قوس متأمِّل (مثالي)", fullName: "المُجدّد المنضبط", essence: "ثوري بخطة محكمة", mechanism: ["يصمم نظريات تحررية مدروسة (مثل: نيلسون مانديلا)", "يرفض التغيير العشوائي"], traditional: "INTJ/1w9" },
+                    "الحالم": { name: "قوس متأمِّل (حالم)", fullName: "الفيلسوف الثائر", essence: "فيلسوف الحرية", mechanism: ["يخلق مفاهيم مجرّدة عن التحرر (مثل: جان بول سارتر)", "يجمع بين العمق والتمرد"], traditional: "INTP/5w4" },
+                    "العملي": { name: "قوس متأمِّل (عملي)", fullName: "الاستراتيجي المغامر", essence: "مهندس المغامرة", mechanism: ["يحول الأفكار الجريئة إلى مشاريع (مثل: إيلون ماسك)", "يركز على \"كسر القواعد المفيدة\""], traditional: "ENTJ/8w7" },
+                    "الراعي": { name: "قوس متأمِّل (راعي)", fullName: "المعلّق الحر", essence: "نبي التحرر", mechanism: ["يحرر الآخرين عبر الأفكار (مثل: باولو فريري)", "يربط بين الحرية والمسؤولية"], traditional: "INFJ/4w5" }
+                },
+                "المتوازن": { 
+                    "المثالي": { name: "قوس متوازن (مثالي)", fullName: "المُلهِم ذو المعايير العالية", essence: "مُصلح بلا حدود", mechanism: ["يوازن بين التحرر والمسؤولية الاجتماعية", "يُحدث تغييرًا دون تخريب"], traditional: "ENFJ/1w2" },
+                    "الحالم": { name: "قوس متوازن (حالم)", fullName: "الجسر بين الإبداع والواقع", essence: "ساحر الواقع", mechanism: ["يصنع فنًّا يحرر العقول (مثل: بانكسي)", "يجمع بين الإثارة والعمق"], traditional: "ENFP/7w6" },
+                    "العملي": { name: "قوس متوازن (عملي)", fullName: "مُنتِج المغامرات", essence: "منتج المفاجآت", mechanism: ["يصمم تجارب غير متوقعة (مثل: ستيف جوبز)", "يحب \"إبهار الناس بالممكن\""], traditional: "ESTP/3w4" },
+                    "الراعي": { name: "قوس متوازن (راعي)", fullName: "المحرّك الاجتماعي", essence: "محرّك الحفلات", mechanism: ["يحول التجمعات إلى مساحات تحرر (مثل: أوبرا وينفري)", "يطلق طاقات الآخرين"], traditional: "ESFP/2w3" }
+                },
+                "المتفاعل": { 
+                    "المثالي": { name: "قوس متفاعل (مثالي)", fullName: "المتحدي السريع", essence: "المُتحدي السريع", mechanism: ["يكسر القواعد بذكاء (مثل: عداء يحطم الأرقام)", "يركز على \"الفوز ضمن الشروط\""], traditional: "ISTP/8w9" },
+                    "الحالم": { name: "قوس متفاعل (حالم)", fullName: "العبقري العفوي", essence: "العبقري العفوي", mechanism: ["ينتج أفكارًا ثورية في اللحظة (مثل: مصمم أزياء مرتجل)", "يعمل بـ \"إلهام اللحظة\""], traditional: "ENTP/7w8" },
+                    "العملي": { name: "قوس متفاعل (عملي)", fullName: "مقتحم الحدود", essence: "مقتحم الحدود", mechanism: ["ينفذ مغامرات خطيرة ببراعة (مثل: متسلق جبال)", "شعاره \"الفعّالية أولًا\""], traditional: "ESTP/7w8" },
+                    "الراعي": { name: "قوس متفاعل (راعي)", fullName: "المُنقذ المغامر", essence: "المنقذ المغامر", mechanism: ["يُجري عمليات إنقاذ جريئة (مثل: رجل الإطفاء المتطرف)", "يحب \"إنقاذ الآخرين من الروتين\""], traditional: "ESFJ/7w6" }
+                }
+            },
+            "الشبكة": {
+                 "المتأمِّل": { 
+                    "المثالي": { name: "شبكة متأمِّل (مثالي)", fullName: "فيلسوف النظم الكاملة", essence: "أرسطو العصر الحديث", mechanism: ["يصمم أطرًا فلسفية / علمية شاملة", "يرفض الأفكار غير المتماسكة منطقيًا"], traditional: "INTJ/5w6" },
+                    "الحالم": { name: "شبكة متأمِّل (حالم)", fullName: "مهندس العوالم النظرية", essence: "تسلا المفكرين", mechanism: ["يبني نظريات ثورية (مثل: فيزياء الكم)", "يعيش في عوالم ذهنية معقدة"], traditional: "INTP/5w4" },
+                    "العملي": { name: "شبكة متأمِّل (عملي)", fullName: "معماري الحلول المعقدة", essence: "عقلية السيليكون فالي", mechanism: ["يحول الأفكار المعقدة لخوارزميات", "يبني أنظمة ذكاء اصطناعي"], traditional: "ENTJ/3w4" },
+                    "الراعي": { name: "شبكة متأمِّل (راعي)", fullName: "حكيم الروابط الاجتماعية", essence: "حكيم القبيلة", mechanism: ["يفسر العالم عبر عدسة اجتماعية", "يصمم نظريات أنثروبولوجية"], traditional: "INFJ/1w9" }
+                },
+                "المتوازن": { 
+                    "المثالي": { name: "شبكة متوازن (مثالي)", fullName: "مصمم الأنظمة المثالية", essence: "مهندس التجارب البشرية", mechanism: ["يصمم أنظمة تعليمية / إدارية متكاملة", "يوازن بين المثالية والواقع"], traditional: "ENFJ/1w2" },
+                    "الحالم": { name: "شبكة متوازن (حالم)", fullName: "نَسّاق الأفكار الإبداعية", essence: "ليوناردو دافينشي الرقمي", mechanism: ["يربط الفن بالعلوم (مثل: تصميم الواقع الافتراضي)", "يعيد تخيل المفاهيم الأساسية"], traditional: "ENFP/4w5" },
+                    "العملي": { name: "شبكة متوازن (عملي)", fullName: "خبير التكامل التقني - البشري", essence: "مهندس العمليات الذكية", mechanism: ["يدمج التكنولوجيا بالسلوك البشري", "يحسن أنظمة العمل بذكاء"], traditional: "ESTP/7w8" },
+                    "الراعي": { name: "شبكة متوازن (راعي)", fullName: "موصل العلاقات المعقدة", essence: "نسّاج المجتمعات", mechanism: ["يبني منصات تواصل ذكية", "يحلل ديناميكيات الجماعات"], traditional: "ESFJ/2w1" }
+                },
+                "المتفاعل": { 
+                    "المثالي": { name: "شبكة متفاعل (مثالي)", fullName: "مُجرب النظريات السريع", essence: "العالم المجنون", mechanism: ["يجرب نظريات جريئة في المختبر", "يختبر الحدود بصرامة"], traditional: "ENTP/5w6" },
+                    "الحالم": { name: "شبكة متفاعل (حالم)", fullName: "مخترع الأفكار الجريئة", essence: "مخترع المستقبل", mechanism: ["يصمم نماذج أولية ثورية", "يعيد تعريف التكنولوجيا يوميًا"], traditional: "ESTP/7w6" },
+                    "العملي": { name: "شبكة متفاعل (عملي)", fullName: "حلّال المشكلات المعقدة", essence: "هاكر النظم", mechanism: ["يحل أعقد المشكلات التقنية بسرعة", "شعاره \"التفكيك ثم إعادة البناء\""], traditional: "ESTJ/8w7" },
+                    "الراعي": { name: "شبكة متفاعل (راعي)", fullName: "محفز الشبكات الاجتماعية", essence: "المحفز الاجتماعي", mechanism: ["يربط الناس عبر أفكار مبتكرة", "يصمم ألعابًا تعليمية تفاعلية"], traditional: "ESFP/3w2" }
+                }
+            },
+            "الدائرة": {
+                "المتأمِّل": { 
+                    "المثالي": { name: "دائرة مُتأمِّل (مثالي)", fullName: "حكيم العلاقات الأخلاقي", essence: "كونفوشيوس العصر الحديث", mechanism: ["يصمم أطرًا أخلاقية للعلاقات", "يحلل ديناميكيات القوة في المجتمعات"], traditional: "INFJ/1w2" },
+                    "الحالم": { name: "دائرة مُتأمِّل (حالم)", fullName: "عرّاف المشاعر الإبداعي", essence: "شكسبير علم النفس", mechanism: ["يفسر المشاعر عبر روايات / فنون", "يكتشف الأنماط الخفية في السلوك البشري"], traditional: "INFP/4w5" },
+                    "العملي": { name: "دائرة مُتأمِّل (عملي)", fullName: "مهندس الروابط العملية", essence: "مهندس الشبكات الاجتماعية", mechanism: ["يبني أنظمة دعم نفسي مؤسسية", "يحول النظريات إلى برامج إرشادية"], traditional: "ENFJ/3w2" },
+                    "الراعي": { name: "دائرة مُتأمِّل (راعي)", fullName: "المرشد الروحي العميق", essence: "المعلم الروحي", mechanism: ["يوجه الأفراد نحو النمو الجوهري", "يمزج الحكمة بالتعاطف"], traditional: "ISFJ/6w5" }
+                },
+                "المتوازن": { 
+                    "المثالي": { name: "دائرة متوازن (مثالي)", fullName: "وسيط الصراعات المثالي", essence: "ديبلوماسي القيم", mechanism: ["يحل النزاعات عبر إيجاد أرضية مشتركة", "يصمم معايير للتفاعل الإنساني"], traditional: "ENFJ/9w1" },
+                    "الحالم": { name: "دائرة متوازن (حالم)", fullName: "سفير الثقافات الإبداعي", essence: "جسر الثقافات", mechanism: ["يربط بين التقاليد والابتكار", "يصمم مشاريع فنية جماعية"], traditional: "ENFP/7w6" },
+                    "العملي": { name: "دائرة متوازن (عملي)", fullName: "منسق الفرق الكفؤ", essence: "مدير الموارد البشرية المثالي", mechanism: ["يحقق الانسجام بين احتياجات الفرد والمؤسسة", "يطور أنظمة تواصل فعالة"], traditional: "ESFJ/2w3" },
+                    "الراعي": { name: "دائرة متوازن (راعي)", fullName: "قلب المجموعة النابض", essence: "الأم تيريزا المجتمعية", mechanism: ["يبني شبكات دعم محلية", "يركز على التكافل الاجتماعي"], traditional: "ISFJ/2w1" }
+                },
+                "المتفاعل": { 
+                    "المثالي": { name: "دائرة متفاعل (مثالي)", fullName: "مُصلح العلاقات السريع", essence: "الطبيب النفسي الميداني", mechanism: ["يتدخل سريعًا في الأزمات العاطفية", "يطبق نظريات العلاج بسرعة"], traditional: "ESFP/8w7" },
+                    "الحالم": { name: "دائرة متفاعل (حالم)", fullName: "مهرج المجموعة الحدسي", essence: "المهرج الحكيم", mechanism: ["يكسر الحواجز بالفكاهة العميقة", "يقرأ المشاعر كما يقرأ الآخرون الكتب"], traditional: "ENTP/7w6" },
+                    "العملي": { name: "دائرة متفاعل (عملي)", fullName: "مسعف العلاقات العاجل", essence: "المسعف العاطفي", mechanism: ["يحل النزاعات العاجلة بذكاء عملي", "شعاره \"الحل الآن، التحليل لاحقًا\""], traditional: "ESTP/3w2" },
+                    "الراعي": { name: "دائرة متفاعل (راعي)", fullName: "الشعلة الاجتماعية", essence: "الشمس الاجتماعية", mechanism: ["يشحن طاقة المجموعات فورًا", "يحول اللقاءات العادية إلى ذكريات"], traditional: "ESFJ/7w6" }
+                }
+            }
+        };
+        
+        // --- 3b. بيانات عامة للأنماط والمستويات والسمات ---
+        const generalBaseInfo = {
+            "الوتد": { صفة: "الثبات", تركيز: "النظام، التأسيس", مثال: "بيل جيتس", 
+                        notes: [
+                            "الوتد المتأمِّل = الأكثر تحليلًا وتخطيطًا (يمثل 70% من الـ INTJ).",
+                            "الوتد المتفاعل = الأكثر ندرة (5% فقط من البشر).",
+                            "السمات الفرعية:",
+                            "- المثالي يرفع معايير النمط.",
+                            "- الحالم يضيف الإبداع.",
+                            "- العملي يعزز الكفاءة.",
+                            "- الراعي يوجهه للخدمة.",
+                            "\"الوتد ليس جمودًا .. هو ضامن استمرار العالم بينما الآخرون يغيرونه\" — فلسفة النظام."
+                        ] },
+            "القوس": { صفة: "التحرر", تركيز: "المغامرة، التجديد", مثال: "ستيف جوبز",
+                        notes: [
+                            "القوس المتأمِّل = الأكثر ندرة (3% من البشر) - يجمع بين التمرد والعمق.",
+                            "القوس المتفاعل = الأكثر شيوعًا (30% من القوس) - عفوية + جرأة.",
+                            "تأثير السمات الفرعية:",
+                            "- المثالي: يوجه التحرر لقضية نبيلة.",
+                            "- الحالم: يجعله فنانًا ثائرًا.",
+                            "- العملي: يحول المغامرة لإنجاز ملموس.",
+                            "- الراعي: يربط الحرية بخدمة الآخرين.",
+                            "\"القوس ليس مجرد طائر حر .. إنه إعصار يُعيد تشكيل العالم\" — فلسفة النظام."
+                        ] },
+            "الدائرة": { صفة: "التماسك", تركيز: "العلاقات، الانتماء", مثال: "الأم تيريزا",
+                        notes: [
+                            "الأكثر شيوعًا: دائرة متوازن (راعي) - 22% من الأنماط.",
+                            "الأكثر ندرة: دائرة مُتأمِّل (حالم) - 5% فقط.",
+                            "التوزيع:",
+                            "- 30% متأمِّل (الحكماء / المحللون).",
+                            "- 50% متوازن (الوسطاء / الموصلون).",
+                            "- 20% متفاعل (المحفزون / المسعفون).",
+                            "\"الدائرة ليست مجرد علاقات .. هي الغراء الذي يمنع العالم من التفتت\" — فلسفة النظام."
+                        ] },
+            "الشبكة": { صفة: "التعقيد", تركيز: "الأفكار، التحليل", مثال: "أينشتاين",
+                        notes: [
+                            "الأكثر شيوعًا: شبكة متوازن (حالم) - 18% من الأنماط.",
+                            "الأكثر ندرة: شبكة متأمِّل (راعي) - 4% فقط.",
+                            "التوزيع:",
+                            "- 45% متأمِّل (العلماء / الفلاسفة).",
+                            "- 35% متوازن (المخترعون الاجتماعيون).",
+                            "- 20% متفاعل (المجربون الجريئون).",
+                            "\"الشبكة ليست أفكارًا مجردة .. هي نظام عصبي للعالم\" — مُنظر النظام."
+                        ] }
+        };
+        const generalLevelInfo = {
+            "المتأمِّل": { صفة: "التحليل", ميزة: "التباطؤ + العمق" },
+            "المتوازن": { صفة: "المرونة", ميزة: "التكيف + التوازن" },
+            "المتفاعل": { صفة: "الفورية", ميزة: "السرعة + التجريب" }
+        };
+        const generalTraitInfo = {
+            "المثالي": { تركيز: "الكمال، القيم" },
+            "الحالم": { تركيز: "الإبداع، الخيال" },
+            "العملي": { تركيز: "الكفاءة، النتائج" },
+            "الراعي": { تركيز: "الدعم، التوجيه" }
+        };
+
+
+        // --- 4. متغيرات حالة الاختبار ---
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questions.length); 
+        let selectedOptionElement = null;
+
+        // --- 5. عناصر DOM ---
+        const introSection = document.getElementById('intro-section');
+        const testSection = document.getElementById('test-section');
+        const resultsSection = document.getElementById('results-section');
+        const startTestBtn = document.getElementById('start-test-btn');
+        const retakeTestBtn = document.getElementById('retake-test-btn');
+        const questionTitleElement = document.getElementById('question-title');
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainerElement = document.getElementById('options-container');
+        const nextQuestionBtn = document.getElementById('next-question-btn');
+        
+        const resultMainTitle = document.getElementById('result-main-title');
+        const resultPatternName = document.getElementById('result-pattern-name');
+        const resultEssence = document.getElementById('result-essence');
+        const resultMechanism = document.getElementById('result-mechanism');
+        const resultTraditionalEquivalent = document.getElementById('result-traditional-equivalent');
+        
+        const diagnosticBasePatternElem = document.getElementById('dominant-base-pattern-diag');
+        const diagnosticCognitiveLevelElem = document.getElementById('dominant-cognitive-level-diag');
+        const diagnosticSubTraitElem = document.getElementById('dominant-sub-trait-diag');
+
+        const generalBaseInfoBox = document.getElementById('general-base-info-box');
+        const basePatternTitle = document.getElementById('base-pattern-title');
+        const basePatternAttribute = document.getElementById('base-pattern-attribute');
+        const basePatternFocus = document.getElementById('base-pattern-focus');
+        const basePatternExample = document.getElementById('base-pattern-example');
+        const basePatternNotes = document.getElementById('base-pattern-notes');
+
+        const generalLevelInfoBox = document.getElementById('general-level-info-box');
+        const cognitiveLevelTitle = document.getElementById('cognitive-level-title');
+        const cognitiveLevelAttribute = document.getElementById('cognitive-level-attribute');
+        const cognitiveLevelFeature = document.getElementById('cognitive-level-feature');
+
+        const generalTraitInfoBox = document.getElementById('general-trait-info-box');
+        const subTraitTitle = document.getElementById('sub-trait-title');
+        const subTraitFocus = document.getElementById('sub-trait-focus');
+
+
+        // --- 6. دوال الاختبار ---
+        function startTest() {
+            currentQuestionIndex = 0;
+            userAnswers.fill(null);
+            introSection.classList.add('hidden');
+            resultsSection.classList.add('hidden');
+            testSection.classList.remove('hidden');
+            nextQuestionBtn.classList.remove('hidden'); 
+            displayQuestion(currentQuestionIndex);
+        }
+
+        function displayQuestion(index) {
+            if (index < questions.length) {
+                const question = questions[index];
+                questionTitleElement.textContent = `السؤال ${index + 1} من ${questions.length}`;
+                questionTextElement.textContent = question.text;
+                optionsContainerElement.innerHTML = '';
+                selectedOptionElement = null;
+                nextQuestionBtn.disabled = true;
+
+                question.options.forEach(option => {
+                    const optionBtn = document.createElement('button');
+                    optionBtn.classList.add('option-btn');
+                    optionBtn.textContent = `${option.value}) ${option.text}`;
+                    optionBtn.dataset.value = option.value;
+
+                    optionBtn.addEventListener('click', () => {
+                        if (selectedOptionElement) {
+                            selectedOptionElement.classList.remove('selected');
+                            selectedOptionElement.disabled = false;
+                        }
+                        optionBtn.classList.add('selected');
+                        optionBtn.disabled = true;
+                        selectedOptionElement = optionBtn;
+
+                        optionsContainerElement.querySelectorAll('.option-btn').forEach(btn => {
+                            if (btn !== selectedOptionElement) btn.disabled = false;
+                        });
+                        selectedOptionElement.disabled = true;
+
+                        userAnswers[currentQuestionIndex] = option.value; 
+                        nextQuestionBtn.disabled = false;
+                    });
+                    optionsContainerElement.appendChild(optionBtn);
+                });
+            } else {
+                calculateAndShowResults();
+            }
+        }
+
+        function handleNextQuestion() {
+            if (userAnswers[currentQuestionIndex] === null && currentQuestionIndex < questions.length) {
+                alert("الرجاء اختيار إجابة قبل المتابعة.");
+                return;
+            }
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion(currentQuestionIndex);
+            } else {
+                calculateAndShowResults();
+            }
+        }
+
+        function calculateAndShowResults() {
+            console.log("Calculating results. User answers:", userAnswers);
+            testSection.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+
+            const scores = {
+                base: { "الوتد": 0, "القوس": 0, "الدائرة": 0, "الشبكة": 0 },
+                level: { "المتأمِّل": 0, "المتوازن": 0, "المتفاعل": 0 },
+                trait: { "المثالي": 0, "الحالم": 0, "العملي": 0, "الراعي": 0 }
+            };
+
+            userAnswers.forEach((answerValue, index) => {
+                if (answerValue) {
+                    const questionId = questions[index].id;
+                    const scoringRule = scoringMap[questionId]?.[answerValue];
+                    if (scoringRule) {
+                        if (scoringRule.base) scores.base[scoringRule.base]++;
+                        if (scoringRule.level) scores.level[scoringRule.level]++;
+                        if (scoringRule.trait) scores.trait[scoringRule.trait]++;
+                    } else {
+                        console.warn(`No scoring rule found for Q_ID ${questionId}, Answer ${answerValue}`);
+                    }
+                }
+            });
+            
+            console.log("Scores:", scores);
+
+            // تحديد النمط المهيمن لكل فئة
+            // تعديل: ضمان وجود قيمة افتراضية إذا كانت كل النقاط صفرًا
+            let dominantBase = "الوتد"; // Default
+            if (Object.values(scores.base).some(s => s > 0)) { // Check if any score is greater than 0
+                 dominantBase = Object.keys(scores.base).reduce((a, b) => scores.base[a] > scores.base[b] ? a : b);
+            } else { console.warn("All base scores are zero. Defaulting to 'الوتد'."); }
+
+
+            let dominantLevel = "المتأمِّل"; // Default
+            if (Object.values(scores.level).some(s => s > 0)) {
+                dominantLevel = Object.keys(scores.level).reduce((a, b) => scores.level[a] > scores.level[b] ? a : b);
+            } else { console.warn("All level scores are zero. Defaulting to 'المتأمِّل'."); }
+
+
+            let dominantTrait = "المثالي"; // Default
+            if (Object.values(scores.trait).some(s => s > 0)) {
+                dominantTrait = Object.keys(scores.trait).reduce((a, b) => scores.trait[a] > scores.trait[b] ? a : b);
+            } else { console.warn("All trait scores are zero. Defaulting to 'المثالي'."); }
+
+
+            console.log("Dominant Base:", dominantBase, "Level:", dominantLevel, "Trait:", dominantTrait);
+
+            diagnosticBasePatternElem.textContent = `${dominantBase} (النقاط: ${scores.base[dominantBase]})`;
+            diagnosticCognitiveLevelElem.textContent = `${dominantLevel} (النقاط: ${scores.level[dominantLevel]})`;
+            diagnosticSubTraitElem.textContent = `${dominantTrait} (النقاط: ${scores.trait[dominantTrait]})`;
+
+            const finalPatternData = patternsData[dominantBase]?.[dominantLevel]?.[dominantTrait];
+            
+            console.log("Final Pattern Data:", finalPatternData);
+
+            if (finalPatternData) {
+                resultMainTitle.textContent = finalPatternData.fullName;
+                resultPatternName.textContent = finalPatternData.name;
+                resultEssence.textContent = finalPatternData.essence;
+                resultMechanism.innerHTML = '';
+                finalPatternData.mechanism.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    resultMechanism.appendChild(li);
+                });
+                resultTraditionalEquivalent.textContent = finalPatternData.traditional;
+
+                // عرض المعلومات العامة الإضافية
+                const baseInfo = generalBaseInfo[dominantBase];
+                if (baseInfo) {
+                    generalBaseInfoBox.classList.remove('hidden');
+                    basePatternTitle.textContent = dominantBase;
+                    basePatternAttribute.textContent = baseInfo.صفة;
+                    basePatternFocus.textContent = baseInfo.تركيز;
+                    basePatternExample.textContent = baseInfo.مثال;
+                    basePatternNotes.innerHTML = '<h6>ملاحظات جوهرية:</h6>'; // Clear previous
+                    baseInfo.notes.forEach(note => {
+                        if (note.startsWith("- ") || note.startsWith("السمات") || note.startsWith("تأثير")) {
+                            const p = document.createElement('p');
+                            p.style.marginRight = "10px";
+                            p.textContent = note;
+                            basePatternNotes.appendChild(p);
+                        } else if (note.startsWith("\"")) { // Quote
+                            const blockquote = document.createElement('blockquote');
+                            blockquote.textContent = note;
+                            blockquote.style.fontStyle = "italic";
+                            blockquote.style.marginTop = "10px";
+                            basePatternNotes.appendChild(blockquote);
+                        }
+                         else {
+                            const p = document.createElement('p');
+                            p.textContent = note;
+                            basePatternNotes.appendChild(p);
+                        }
+                    });
+                } else { generalBaseInfoBox.classList.add('hidden'); }
+
+                const levelInfo = generalLevelInfo[dominantLevel];
+                if (levelInfo) {
+                    generalLevelInfoBox.classList.remove('hidden');
+                    cognitiveLevelTitle.textContent = dominantLevel;
+                    cognitiveLevelAttribute.textContent = levelInfo.صفة;
+                    cognitiveLevelFeature.textContent = levelInfo.ميزة;
+                } else { generalLevelInfoBox.classList.add('hidden'); }
+
+                const traitInfo = generalTraitInfo[dominantTrait];
+                if (traitInfo) {
+                    generalTraitInfoBox.classList.remove('hidden');
+                    subTraitTitle.textContent = dominantTrait;
+                    subTraitFocus.textContent = traitInfo.تركيز;
+                } else { generalTraitInfoBox.classList.add('hidden'); }
+
+            } else {
+                resultMainTitle.textContent = "لم يتم تحديد نمط دقيق";
+                resultPatternName.textContent = "-";
+                resultEssence.textContent = "يرجى التأكد من أن جميع إجاباتك قد ساهمت في تحديد مكونات النمط الثلاثة (الأساسي، الإدراكي، الفرعي). قد تحتاج لإعادة الاختبار أو مراجعة خريطة التسجيل إذا كنت مطور الاختبار.";
+                resultMechanism.innerHTML = '';
+                resultTraditionalEquivalent.textContent = '';
+                
+                generalBaseInfoBox.classList.add('hidden');
+                generalLevelInfoBox.classList.add('hidden');
+                generalTraitInfoBox.classList.add('hidden');
+                console.error("CRITICAL: Could not find final pattern data for computed dominant types:", dominantBase, dominantLevel, dominantTrait);
+            }
+        }
+
+        // --- 7. ربط الأحداث ---
+        startTestBtn.addEventListener('click', startTest);
+        nextQuestionBtn.addEventListener('click', handleNextQuestion);
+        retakeTestBtn.addEventListener('click', startTest);
+
+        // --- تهيئة أولية ---
+        testSection.classList.add('hidden');
+        resultsSection.classList.add('hidden');
+    </script>
+</body>
+</html>
